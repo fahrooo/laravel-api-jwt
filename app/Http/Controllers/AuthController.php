@@ -42,7 +42,6 @@ class AuthController extends Controller
         } else {
             return response()->json(['message' => 'Register Failed']);
         }
-        
     }
 
     /**
