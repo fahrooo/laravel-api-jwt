@@ -29,7 +29,7 @@ class UsersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function paginatation()
+    public function pagination()
     {
         $name = request('name');
         $page = request('page') - 1;

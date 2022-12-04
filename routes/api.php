@@ -39,7 +39,7 @@ Route::group([
 
     Route::get('users', [UsersController::class, 'index']);
     Route::post('users/create', [UsersController::class, 'store']);
-    Route::post('users', [UsersController::class, 'paginatation']);
+    Route::post('users', [UsersController::class, 'pagination']);
     Route::get('users/{id}', [UsersController::class, 'show']);
     Route::put('users/update/{id}', [UsersController::class, 'update']);
     Route::delete('users/delete/{id}', [UsersController::class, 'destroy']);
