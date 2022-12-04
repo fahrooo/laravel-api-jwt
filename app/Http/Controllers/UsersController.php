@@ -29,9 +29,22 @@ class UsersController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function paginatation()
     {
-        //
+        $name = request('name');
+        $page = request('page') - 1;
+        $limit = request('limit');
+        $offset = $limit * $page;
+        $totalRows = User::where('name', 'like', "%" . $name . "%")->count();
+        $totalPage = ceil($totalRows / $limit);
+
+        $user = User::where('name', 'like', "%" . $name . "%")->offset($offset)->limit($limit)->get();
+
+        if ($user) {
+            return response()->json(['status' => '200', 'data' => $user, 'page' => $page + 1, 'limit' => $limit, 'totalRows' => $totalRows, 'totalPage' => $totalPage]);
+        } else {
+            return response()->json(['status' => '404', 'message' => 'Data Not Found']);
+        }
     }
 
     /**
@@ -73,7 +86,13 @@ class UsersController extends Controller
      */
     public function show($id)
     {
-        //
+        $user = User::findOrFail($id);
+
+        if ($user) {
+            return response()->json(['status' => '200', 'data' => $user]);
+        } else {
+            return response()->json(['status' => '404', 'message' => 'Data Not Found']);
+        }
     }
 
     /**
@@ -96,7 +115,28 @@ class UsersController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $validator = Validator::make(request()->all(), [
+            'name' => 'required',
+            'email' => 'required|email|unique:users',
+            'password' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->messages());
+        }
+
+        $user = User::findOrFail($id)
+            ->update([
+                'name' => request('name'),
+                'email' => request('email'),
+                'password' => Hash::make(request('password')),
+            ]);
+
+        if ($user) {
+            return response()->json(['status' => 200, 'message' => 'Update Successfully']);
+        } else {
+            return response()->json(['status' => 400, 'message' => 'Update Failed']);
+        }
     }
 
     /**
@@ -107,6 +147,13 @@ class UsersController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $user = User::findOrFail($id)
+            ->delete();
+
+        if ($user) {
+            return response()->json(['status' => 200, 'message' => 'Delete Successfully']);
+        } else {
+            return response()->json(['status' => 400, 'message' => 'Delete Failed']);
+        }
     }
 }
