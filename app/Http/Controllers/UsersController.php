@@ -11,7 +11,7 @@ class UsersController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('auth:api');
+        // $this->middleware('auth:api');
     }
 
     /**
@@ -41,9 +41,9 @@ class UsersController extends Controller
         $user = User::where('name', 'like', "%" . $name . "%")->offset($offset)->limit($limit)->get();
 
         if ($user) {
-            return response()->json(['status' => '200', 'data' => $user, 'page' => $page + 1, 'limit' => $limit, 'totalRows' => $totalRows, 'totalPage' => $totalPage]);
+            return response()->json(['status' => 200, 'data' => $user, 'page' => $page + 1, 'limit' => $limit, 'totalRows' => $totalRows, 'totalPage' => $totalPage]);
         } else {
-            return response()->json(['status' => '404', 'message' => 'Data Not Found']);
+            return response()->json(['status' => 404, 'message' => 'Data Not Found']);
         }
     }
 
@@ -72,9 +72,9 @@ class UsersController extends Controller
         ]);
 
         if ($user) {
-            return response()->json(['message' => 'Register Successfully']);
+            return response()->json(['message' => 'Created Successfully']);
         } else {
-            return response()->json(['message' => 'Register Failed']);
+            return response()->json(['message' => 'Created Failed']);
         }
     }
 
@@ -89,9 +89,9 @@ class UsersController extends Controller
         $user = User::findOrFail($id);
 
         if ($user) {
-            return response()->json(['status' => '200', 'data' => $user]);
+            return response()->json(['status' => 200, 'data' => $user]);
         } else {
-            return response()->json(['status' => '404', 'message' => 'Data Not Found']);
+            return response()->json(['status' => 404, 'message' => 'Data Not Found']);
         }
     }
 
